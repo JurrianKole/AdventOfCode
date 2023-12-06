@@ -1,0 +1,31 @@
+
+K
+AdventOfCode/src/Program.cs,7\5\7538c9a85d556d893dbe001d6861b44194145d78
+P
+ AdventOfCode/input/inputday1.txt,3\3\33a7d011fc161f1028cb4274768319608f2e4057
+W
+'AdventOfCode/src/Solutions/Day1Part1.cs,1\1\1101e148a97dda79cceec4f31ae2ba086eebfed3
+W
+'AdventOfCode/src/Solutions/Day1Part2.cs,7\e\7ecea6230286b265d5812000a7857ee9d9cd8cf1
+X
+(AdventOfCode/src/Helpers/StringHelper.cs,b\9\b93682680ffc588df8313b089e6a5f1a2bfd437b
+R
+"AdventOfCode/src/Solutions/Day2.cs,4\8\48ef77f2bd9b86fcebca6d49ee060265b7c50bad
+P
+ AdventOfCode/input/inputday2.txt,d\8\d8e737d45f63460c2539950c32c7cee1b49701e7
+W
+'AdventOfCode/src/Solutions/Day2Part1.cs,e\3\e34416d3aea1c0e25c7bc6063dd8b2c2a07b3179
+W
+'AdventOfCode/src/Solutions/Day2Part2.cs,e\5\e59984a0d7e099793c4cb7dccb48cc76dcdeff27
+W
+'AdventOfCode/src/Solutions/Day3Part1.cs,5\0\50140d77525a460951ed7e8de7e1bc86dcaad31f
+U
+%AdventOfCode/src/Base/SolutionBase.cs,8\6\868f4cc7d2e5cfab0fb049d6a9ee291c807c0484
+P
+ AdventOfCode/input/inputday3.txt,5\7\570d74b9ca2fb3178b7c4374d8e6a3184a7124a3
+V
+&AdventOfCode/src/Helpers/CharHelper.cs,4\7\474c5d3dd8667c767a6077d8b54999ac8874624a
+W
+'AdventOfCode/src/Solutions/Day3Part2.cs,f\9\f9f9e3528a6afb10225146d91cc2de4f8905891a
+`
+0AdventOfCode/src/Container/NeighbourContainer.cs,e\c\ec0803529c0dcd7ce454415f943bf7687aba69d4
