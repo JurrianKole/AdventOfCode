@@ -1,8 +1,9 @@
 ﻿using AdventOfCode.Base;
+using AdventOfCode.Helpers;
 
 namespace AdventOfCode.Solutions;
 
-public class Day1Part2 : SolutionBase
+public class Day1Part2 : ISolution
 {
     private static readonly IReadOnlyDictionary<string, int> DigitsAsWords = new Dictionary<string, int>
     {
@@ -21,9 +22,9 @@ public class Day1Part2 : SolutionBase
     /// Should produce 53268
     /// </summary>
     /// <returns></returns>
-    public static int Solve()
+    public int Solve()
     {
-        var input = GetInput("inputday1");
+        var input = GetInput(1);
 
         var alternative = input
             .Select(GetFirstAndLastDigitSlowButLessDirty)
@@ -35,7 +36,12 @@ public class Day1Part2 : SolutionBase
             .Select(int.Parse)
             .Sum();
     }
-    
+
+    public string[] GetInput(int day)
+    {
+        return InputHelper.GetInputForDay(day);
+    }
+
     private static string GetFirstAndLastDigitFastAndDirty(string input)
     {
         foreach (var digit in DigitsAsWords)

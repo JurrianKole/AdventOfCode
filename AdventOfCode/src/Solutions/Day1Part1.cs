@@ -1,19 +1,27 @@
 ﻿using AdventOfCode.Base;
+using AdventOfCode.Helpers;
 
 namespace AdventOfCode.Solutions;
 
-public class Day1Part1 : SolutionBase
+public class Day1Part1 : ISolution
 {
     /// <summary>
     /// Should produce 53080
     /// </summary>
     /// <returns></returns>
-    public static int Solve()
+    public int Solve()
     {
-        return GetInput("inputday1")
+        var input = GetInput(1);
+        
+        return input
             .Select(ExtractAppendedFirstAndLastDigits)
             .Select(int.Parse)
             .Sum();
+    }
+
+    public string[] GetInput(int day)
+    {
+        return InputHelper.GetInputForDay(day);
     }
 
     private static string ExtractAppendedFirstAndLastDigits(string input)

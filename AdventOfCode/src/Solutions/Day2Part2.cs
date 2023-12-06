@@ -1,16 +1,17 @@
 ﻿using AdventOfCode.Base;
+using AdventOfCode.Helpers;
 
 namespace AdventOfCode.Solutions;
 
-public class Day2Part2 : SolutionBase
+public class Day2Part2 : ISolution
 {
     /// <summary>
     /// Should produce 84538
     /// </summary>
     /// <returns></returns>
-    public static int Solve()
+    public int Solve()
     {
-        var input = GetInput("inputday2");
+        var input = GetInput(2);
 
         return input
             .Select(ParseGameData)
@@ -18,7 +19,12 @@ public class Day2Part2 : SolutionBase
             .Select(round => round.RedCount * round.GreenCount * round.BlueCount)
             .Sum();
     }
-    
+
+    public string[] GetInput(int day)
+    {
+        return InputHelper.GetInputForDay(day);
+    }
+
     private static GameData ParseGameData(string input)
     {
         input = input.Replace(" ", string.Empty);

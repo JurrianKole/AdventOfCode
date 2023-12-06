@@ -1,16 +1,17 @@
 ﻿using AdventOfCode.Base;
+using AdventOfCode.Helpers;
 
 namespace AdventOfCode.Solutions;
 
-public class Day2Part1 : SolutionBase
+public class Day2Part1 : ISolution
 {
     /// <summary>
     /// Should produce 1867
     /// </summary>
     /// <returns></returns>
-    public static int Solve()
+    public int Solve()
     {
-        var input = GetInput("inputday2");
+        var input = GetInput(2);
 
         const int MaximumRedCubeCount = 12;
         const int MaximumGreenCubeCount = 13;
@@ -25,6 +26,11 @@ public class Day2Part1 : SolutionBase
                     && round.GreenCount <= MaximumGreenCubeCount 
                     && round.BlueCount <= MaximumBlueCubeCount))
             .Sum(r => r.GameNumber);
+    }
+
+    public string[] GetInput(int day)
+    {
+        return InputHelper.GetInputForDay(day);
     }
 
     private static GameData ParseGameData(string input)

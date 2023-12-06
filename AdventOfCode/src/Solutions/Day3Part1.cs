@@ -1,104 +1,96 @@
-﻿using System.Text;
-
-using AdventOfCode.Base;
+﻿using AdventOfCode.Base;
 using AdventOfCode.Helpers;
+using AdventOfCode.Models;
+using AdventOfCode.Models.Input;
+using AdventOfCode.Models.Output;
 
 namespace AdventOfCode.Solutions;
 
-public class Day3Part1 : SolutionBase
+public class Day3Part1 : ISolution
 {
     /// <summary>
     /// Should produce 546312
     /// </summary>
     /// <returns></returns>
-    public static int Solve()
+    public int Solve()
     {
-        var input = GetInput("inputday3");
+        var input = GetInput(3);
 
-        var symbols = ExtractSymbols(input);
+        var parsedInput = ParseInput(input);
 
-        var potentialPartNumbers = input
-            .Select(ExtractPotentialPartNumberMetadata)
-            .SelectMany(p => p)
+        var allSymbols = parsedInput.Where(p => p.IsSymbol).Select(s => (Symbol)s).ToArray();
+        var allDigits = parsedInput.Where(p => p.IsDigit).Select(d => (Digit)d).ToArray();
+
+        var digitsWithNeighbouringSymbol = allDigits.Where(d => DigitIsNextToSymbol(d, allSymbols)).ToArray();
+
+        var reconstructedNumbers = digitsWithNeighbouringSymbol
+            .Select(n => ReconstructNumber(n, allDigits))
+            .Distinct();
+
+        var numbers = reconstructedNumbers
+            .Select(o => int.Parse(o.Value))
+            .Sum();
+
+        return numbers;
+    }
+
+    public string[] GetInput(int day)
+    {
+        return InputHelper.GetInputForDay(day);
+    }
+
+    private static IOutputVector ReconstructNumber(Digit digit, Digit[] allDigits)
+    {
+        var digitsInSameRow = allDigits
+            .Where(d => d.Row == digit.Row)
+            .OrderBy(d => d.Column)
             .ToArray();
 
-        return potentialPartNumbers
-            .Where(partNumber => IsPartNumber(partNumber, input, symbols))
-            .Select(p => p.Value)
-            .Select(int.Parse)
-            .Sum();
-    }
-    
-    private static readonly Func<char, bool> SymbolFilter = c => !char.IsDigit(c) && c != '.';
+        var leftDigit = digit;
+        var rightDigit = digit;
 
-    private static bool IsPartNumber(
-        PotentialPartNumberMetaData potentialPartNumberMetaData, 
-        string[] input, 
-        HashSet<char> partNumberIdentifiers)
-    {
-        for (var i = 0; i < potentialPartNumberMetaData.Value.Length; i++)
+        while (Array.Exists(digitsInSameRow, d => leftDigit.Column - d.Column == 1))
         {
-            var distinctNeighbours = StringHelper.GetDistinctNeighbours(
-                input, 
-                potentialPartNumberMetaData.ColumnStartIndex + i, 
-                potentialPartNumberMetaData.RowIndex,
-                SymbolFilter,
-                '.');
-
-            if (distinctNeighbours.Any(partNumberIdentifiers.Contains))
-            {
-                return true;
-            }
+            leftDigit = digitsInSameRow.First(d => leftDigit.Column - d.Column == 1);
         }
 
-        return false;
+        while (Array.Exists(digitsInSameRow, d => rightDigit.Column - d.Column == -1))
+        {
+            rightDigit = digitsInSameRow.First(d => rightDigit.Column - d.Column == -1);
+        }
+
+        var value = digitsInSameRow
+            .Where(d => d.Column >= leftDigit.Column && d.Column <= rightDigit.Column)
+            .Aggregate("", (current, next) => current + next.Value);
+
+        return new Output(leftDigit.Row, leftDigit.Column, value);
     }
     
-    private static HashSet<char> ExtractSymbols(string[] input)
+    private static bool DigitIsNextToSymbol(Digit digit, Symbol[] symbols)
+    {
+        Func<Digit, Symbol, bool> isNextToSymbol = (d, s) => 
+            (d.Row == s.Row || d.Row - s.Row == 1 || d.Row - s.Row == -1) 
+            && (d.Column == s.Column || d.Column - s.Column == 1 || d.Column - s.Column == -1);
+        
+        return Array.Exists(symbols, s => isNextToSymbol(digit, s));
+    }
+
+    private static IInputVector[] ParseInput(string[] input)
     {
         return input
-            .Select(line => line.ToCharArray().Where(SymbolFilter))
-            .SelectMany(c => c)
-            .ToHashSet();
+            .Select(
+                (line, rowIndex) =>
+                    line.Select(
+                        (character, columnIndex) =>
+                        {
+                            return character switch
+                            {
+                                '.' => (IInputVector)new Dot(),
+                                _ when char.IsDigit(character) => new Digit(rowIndex, columnIndex, (int)char.GetNumericValue(character)),
+                                _ => new Symbol(rowIndex, columnIndex, character)
+                            };
+                        }))
+            .SelectMany(r => r)
+            .ToArray();
     }
-
-    private static PotentialPartNumberMetaData[] ExtractPotentialPartNumberMetadata(string input, int row)
-    {
-        var partNumbers = new List<PotentialPartNumberMetaData>();
-        
-        for (var i = 0; i < input.Length; i++)
-        {
-            if (char.IsDigit(input[i]))
-            {
-                var partNumber = GetPartNumber(input, i, row);
-
-                partNumbers.Add(partNumber);
-
-                i += partNumber.Value.Length;
-            }
-        }
-
-        return partNumbers.ToArray();
-    }
-
-    private static PotentialPartNumberMetaData GetPartNumber(string input, int offSet, int row)
-    {
-        var stringBuilder = new StringBuilder();
-        
-        for (var i = offSet; i < input.Length; i++)
-        {
-            if (char.IsDigit(input[i]))
-            {
-                stringBuilder.Append(char.GetNumericValue(input[i]));
-            }
-            else
-            {
-                break;
-            }
-        }
-        
-        return new PotentialPartNumberMetaData(stringBuilder.ToString(), row, offSet);
-    }
-
-    private sealed record PotentialPartNumberMetaData(string Value, int RowIndex, int ColumnStartIndex);
 }
