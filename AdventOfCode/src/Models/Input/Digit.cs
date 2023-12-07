@@ -12,9 +12,7 @@ public sealed class Digit : IInputVector
     public bool IsDigit => true;
 
     public bool IsSymbol => false;
-
-    public bool IsDot => false;
-
+    
     public int Row { get; }
 
     public int Column { get; }
