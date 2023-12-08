@@ -5,13 +5,20 @@ namespace AdventOfCode.Solutions;
 
 public class Day4Part2 : ISolution
 {
+    private readonly IInputProvider inputProvider;
+
+    public Day4Part2(IInputProvider inputProvider)
+    {
+        this.inputProvider = inputProvider;
+    }
+
     /// <summary>
     /// Should produce 5489600
     /// </summary>
     /// <returns></returns>
-    public int Solve()
+    public long Solve()
     {
-        var input = GetInput(4);
+        var input = this.inputProvider.GetInputForDay(4);
         
         var originalSetOfScratchCards = input
             .Select(ParseScratchCard)
@@ -38,11 +45,6 @@ public class Day4Part2 : ISolution
         }
 
         return winningCardsPerScratchCard.Sum(w => w.Value);
-    }
-
-    public string[] GetInput(int day)
-    {
-        return InputHelper.GetInputForDay(day);
     }
 
     private static int CalculateNumberOfCopiesToReceive(ScratchCard scratchCard)

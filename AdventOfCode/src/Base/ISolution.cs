@@ -2,7 +2,5 @@
 
 public interface ISolution
 {
-    int Solve();
-
-    string[] GetInput(int day);
+    long Solve();
 }

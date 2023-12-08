@@ -5,24 +5,26 @@ namespace AdventOfCode.Solutions;
 
 public class Day2Part2 : ISolution
 {
+    private readonly IInputProvider inputProvider;
+
+    public Day2Part2(IInputProvider inputProvider)
+    {
+        this.inputProvider = inputProvider;
+    }
+
     /// <summary>
     /// Should produce 84538
     /// </summary>
     /// <returns></returns>
-    public int Solve()
+    public long Solve()
     {
-        var input = GetInput(2);
-
+        var input = this.inputProvider.GetInputForDay(2);
+        
         return input
             .Select(ParseGameData)
             .Select(gameData => new MaximumCubeCountPerGame(gameData.GameRounds.Max(r => r.RedCount), gameData.GameRounds.Max(r => r.GreenCount), gameData.GameRounds.Max(r => r.BlueCount)))
             .Select(round => round.RedCount * round.GreenCount * round.BlueCount)
             .Sum();
-    }
-
-    public string[] GetInput(int day)
-    {
-        return InputHelper.GetInputForDay(day);
     }
 
     private static GameData ParseGameData(string input)

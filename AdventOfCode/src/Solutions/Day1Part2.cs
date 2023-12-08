@@ -18,13 +18,20 @@ public class Day1Part2 : ISolution
         { "nine", 9 }
     };
     
+    private readonly IInputProvider inputProvider;
+
+    public Day1Part2(IInputProvider inputProvider)
+    {
+        this.inputProvider = inputProvider;
+    }
+
     /// <summary>
     /// Should produce 53268
     /// </summary>
     /// <returns></returns>
-    public int Solve()
+    public long Solve()
     {
-        var input = GetInput(1);
+        var input = this.inputProvider.GetInputForDay(1);
 
         var alternative = input
             .Select(GetFirstAndLastDigitSlowButLessDirty)
@@ -35,11 +42,6 @@ public class Day1Part2 : ISolution
             .Select(GetFirstAndLastDigitFastAndDirty)
             .Select(int.Parse)
             .Sum();
-    }
-
-    public string[] GetInput(int day)
-    {
-        return InputHelper.GetInputForDay(day);
     }
 
     private static string GetFirstAndLastDigitFastAndDirty(string input)

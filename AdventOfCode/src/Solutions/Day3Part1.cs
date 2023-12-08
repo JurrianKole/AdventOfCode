@@ -7,13 +7,20 @@ namespace AdventOfCode.Solutions;
 
 public class Day3Part1 : ISolution
 {
+    private readonly IInputProvider inputProvider;
+
+    public Day3Part1(IInputProvider inputProvider)
+    {
+        this.inputProvider = inputProvider;
+    }
+
     /// <summary>
     /// Should produce 546312
     /// </summary>
     /// <returns></returns>
-    public int Solve()
+    public long Solve()
     {
-        var input = GetInput(3);
+        var input = this.inputProvider.GetInputForDay(3);
 
         var parsedInput = ParseInput(input);
 
@@ -31,11 +38,6 @@ public class Day3Part1 : ISolution
             .Sum();
 
         return numbers;
-    }
-
-    public string[] GetInput(int day)
-    {
-        return InputHelper.GetInputForDay(day);
     }
 
     private static IOutputVector ReconstructNumber(Digit digit, Digit[] allDigits)

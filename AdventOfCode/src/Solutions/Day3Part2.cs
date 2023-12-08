@@ -7,13 +7,20 @@ namespace AdventOfCode.Solutions;
 
 public class Day3Part2 : ISolution
 {
+    private readonly IInputProvider inputProvider;
+
+    public Day3Part2(IInputProvider inputProvider)
+    {
+        this.inputProvider = inputProvider;
+    }
+
     /// <summary>
     /// 87449461 is too low
     /// </summary>
     /// <returns></returns>
-    public int Solve()
+    public long Solve()
     {
-        var input = GetInput(3);
+        var input = this.inputProvider.GetInputForDay(3);
 
         var parsedInput = ParseInput(input);
 
@@ -32,11 +39,6 @@ public class Day3Part2 : ISolution
             .Sum();
 
         return gearRatios;
-    }
-
-    public string[] GetInput(int day)
-    {
-        return InputHelper.GetInputForDay(day);
     }
 
     private static int MultiplyGears(Symbol asterisk, Digit[] digitsNextToAsterisks, Digit[] allDigits)

@@ -5,9 +5,16 @@ namespace AdventOfCode.Solutions;
 
 public class Day4Part1 : ISolution
 {
-    public int Solve()
+    private readonly IInputProvider inputProvider;
+
+    public Day4Part1(IInputProvider inputProvider)
     {
-        var input = GetInput(4);
+        this.inputProvider = inputProvider;
+    }
+
+    public long Solve()
+    {
+        var input = this.inputProvider.GetInputForDay(4);
 
         var points = input
             .Select(ParseScratchCard)
@@ -15,11 +22,6 @@ public class Day4Part1 : ISolution
             .Sum();
         
         return points;
-    }
-
-    public string[] GetInput(int day)
-    {
-        return InputHelper.GetInputForDay(day);
     }
 
     private static int CalculateScore(ScratchCard scratchCard)
