@@ -14,96 +14,39 @@ public class Day5Part1 : ISolution
 
     public long Solve()
     {
-        var input = this.inputProvider.GetInputForDay(5);
+        var puzzleInput = ParseInput();
 
-        var puzzleInput = ParseInput(input);
+        var seeds = puzzleInput.Seeds;
+        var puzzleInputMaps = puzzleInput.Maps;
 
-        var answer = puzzleInput
-            .Seeds
-            .Select(s => GetLocationForSeed(s, puzzleInput))
+        var something = seeds
+            .Select(
+                seed => puzzleInputMaps
+                    .Aggregate(
+                        seed,
+                        (identifier, maps) =>
+                        {
+                            var offSet = maps.FirstOrDefault(map => identifier >= map[1] && identifier < map[1] + map[2], new[] { identifier, identifier, 1 });
+
+                            return identifier - offSet[1] + offSet[0];
+                        }))
             .Min();
 
-        return answer;
+        return something;
     }
 
-    private static readonly Func<long, PuzzleInput, Map>[] AlmanacMaps =
+    private PuzzleInput ParseInput()
     {
-        (id, puzzleInput) => GetMap(id, puzzleInput.Maps.ElementAt(0)),
-        (id, puzzleInput) => GetMap(id, puzzleInput.Maps.ElementAt(1)),
-        (id, puzzleInput) => GetMap(id, puzzleInput.Maps.ElementAt(2)),
-        (id, puzzleInput) => GetMap(id, puzzleInput.Maps.ElementAt(3)),
-        (id, puzzleInput) => GetMap(id, puzzleInput.Maps.ElementAt(4)),
-        (id, puzzleInput) => GetMap(id, puzzleInput.Maps.ElementAt(5)),
-        (id, puzzleInput) => GetMap(id, puzzleInput.Maps.ElementAt(6)),
-    };
-    
-    private static long GetLocationForSeed(Seed seed, PuzzleInput puzzleInput)
-    {
-        return AlmanacMaps
-            .Aggregate(
-                seed.Identifier,
-                ((identifier, mapper) =>
-                {
-                    var newMap = mapper(identifier, puzzleInput);
+        var input = this.inputProvider.GetRawInputForDay(5);
 
-                    var offSet = identifier - newMap.SourceRangeStart;
+        var segments = input.Split("\n\n");
 
-                    identifier = newMap.DestinationRangeStart + offSet;
+        var seeds = segments[0].Split(':')[1].TrimStart(' ').Split(' ').Select(long.Parse);
 
-                    return identifier;
-                }));
+        var maps = segments.Skip(1).Select(block => block.Split('\n').Skip(1).Select(line => line.Split(' ').Select(long.Parse).ToArray()));
+
+        return new PuzzleInput(seeds, maps);
     }
 
-    private static Map GetMap(long identifier, Map[] maps)
-    {
-        return maps
-            .FirstOrDefault(
-                map => identifier >= map.SourceRangeStart && identifier < map.SourceRangeStart + map.Range,
-                new Map(identifier, identifier, 1));
-    }
-
-    private static PuzzleInput ParseInput(string[] input)
-    {
-        var seeds = input[0]
-            .Substring(input[0].IndexOf(':') + 2)
-            .Split(' ')
-            .Select(long.Parse)
-            .Select(i => new Seed(i))
-            .ToArray();
-
-        var mapNames = new[]
-        {
-            "seed-to-soil map:",
-            "soil-to-fertilizer map:",
-            "fertilizer-to-water map:",
-            "water-to-light map:",
-            "light-to-temperature map:",
-            "temperature-to-humidity map:",
-            "humidity-to-location map:"
-        };
-
-        return new PuzzleInput(
-            seeds,
-            mapNames.Select(mapName => GetMapFromInput(input, mapName)));
-    }
-
-    private static Map[] GetMapFromInput(string[] input, string mapName)
-    {
-        return input
-            .SkipWhile(s => !s.Equals(mapName))
-            .Skip(1)
-            .TakeWhile(s => !string.IsNullOrWhiteSpace(s))
-            .Select(s => s.Split(' '))
-            .Select(i => new Map(
-                long.Parse(i[0]), 
-                long.Parse(i[1]), 
-                long.Parse(i[2])))
-            .ToArray();
-    }
-
-    private sealed record PuzzleInput(Seed[] Seeds, IEnumerable<Map[]> Maps);
-
-    private sealed record Seed(long Identifier);
-
-    private sealed record Map(long DestinationRangeStart, long SourceRangeStart, long Range);
+    private sealed record PuzzleInput(IEnumerable<long> Seeds, IEnumerable<IEnumerable<long[]>> Maps);
 }
