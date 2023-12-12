@@ -1,24 +1,22 @@
-﻿using AdventOfCode.Base;
-using AdventOfCode.Helpers;
+using AdventOfCode.Abstractions;
 
-namespace AdventOfCode.Solutions;
+namespace AdventOfCode.Solutions.Day2;
 
-public class Day2Part2 : ISolution
+public class Day2Solution : ISolution
 {
     private readonly IInputProvider inputProvider;
 
-    public Day2Part2(IInputProvider inputProvider)
+    public Day2Solution(IInputProvider inputProvider)
     {
         this.inputProvider = inputProvider;
     }
 
-    /// <summary>
-    /// Should produce 84538
-    /// </summary>
-    /// <returns></returns>
+    public int Day => 2;
+
     public long Solve()
     {
-        var input = this.inputProvider.GetInputForDay(2);
+        // Should produce 84538
+        var input = this.inputProvider.GetPuzzleInput(this).Split('\n');
         
         return input
             .Select(ParseGameData)
@@ -26,7 +24,7 @@ public class Day2Part2 : ISolution
             .Select(round => round.RedCount * round.GreenCount * round.BlueCount)
             .Sum();
     }
-
+    
     private static GameData ParseGameData(string input)
     {
         input = input.Replace(" ", string.Empty);

@@ -1,4 +1,4 @@
-﻿namespace AdventOfCode.Models.Input;
+namespace AdventOfCode.Solutions.Day3.Models;
 
 public sealed class Symbol : IInputVector
 {

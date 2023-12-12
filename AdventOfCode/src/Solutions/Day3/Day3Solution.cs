@@ -1,29 +1,25 @@
-using AdventOfCode.Base;
-using AdventOfCode.Helpers;
-using AdventOfCode.Models.Input;
-using AdventOfCode.Models.Output;
+using AdventOfCode.Abstractions;
+using AdventOfCode.Solutions.Day3.Models;
 
-namespace AdventOfCode.Solutions;
+namespace AdventOfCode.Solutions.Day3;
 
-public class Day3Part2 : ISolution
+public class Day3Solution : ISolution
 {
     private readonly IInputProvider inputProvider;
 
-    public Day3Part2(IInputProvider inputProvider)
+    public Day3Solution(IInputProvider inputProvider)
     {
         this.inputProvider = inputProvider;
     }
 
-    /// <summary>
-    /// 87449461 is too low
-    /// </summary>
-    /// <returns></returns>
+    public int Day => 3;
+
     public long Solve()
     {
-        var input = this.inputProvider.GetInputForDay(3);
+        var input = this.inputProvider.GetPuzzleInput(this).Split('\n');
 
         var parsedInput = ParseInput(input);
-
+        
         var allSymbols = parsedInput.Where(p => p.IsSymbol).Select(s => (Symbol)s).ToArray();
         var allAsterisks = allSymbols.Where(s => s.Value == '*').ToArray();
         var allDigits = parsedInput.Where(p => p.IsDigit).Select(d => (Digit)d).ToArray();
@@ -40,7 +36,7 @@ public class Day3Part2 : ISolution
 
         return gearRatios;
     }
-
+    
     private static int MultiplyGears(Symbol asterisk, Digit[] digitsNextToAsterisks, Digit[] allDigits)
     {
         var something = digitsNextToAsterisks
@@ -68,7 +64,7 @@ public class Day3Part2 : ISolution
         return count == 2;
     }
 
-    private static IOutputVector ReconstructNumber(Digit digit, Digit[] allDigits)
+    private static Output ReconstructNumber(Digit digit, Digit[] allDigits)
     {
         var digitsInSameRow = allDigits
             .Where(d => d.Row == digit.Row)

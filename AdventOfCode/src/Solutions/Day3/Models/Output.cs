@@ -1,6 +1,6 @@
-﻿namespace AdventOfCode.Models.Output;
+﻿namespace AdventOfCode.Solutions.Day3.Models;
 
-public sealed record Output : IOutputVector
+public sealed record Output
 {
     public Output(int row, int column, string value)
     {
