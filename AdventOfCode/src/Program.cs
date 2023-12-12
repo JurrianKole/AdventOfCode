@@ -5,6 +5,7 @@ using AdventOfCode.Solutions.Day1;
 using AdventOfCode.Solutions.Day2;
 using AdventOfCode.Solutions.Day3;
 using AdventOfCode.Solutions.Day4;
+using AdventOfCode.Solutions.Day5;
 using AdventOfCode.Worker;
 
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +24,7 @@ using var host = Host
             services.AddTransient<ISolution, Day2Solution>();
             services.AddTransient<ISolution, Day3Solution>();
             services.AddTransient<ISolution, Day4Solution>();
+            services.AddTransient<ISolution, Day5Solution>();
         })
     .Build();
     
