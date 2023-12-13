@@ -18,6 +18,7 @@ public class Day5Solution : ISolution
     {
         var almanac = ParseInput();
 
+        // only part 1 :(
         return almanac
             .Seeds
             .Select(seed => GetFinalDestination(seed, almanac.Maps))
